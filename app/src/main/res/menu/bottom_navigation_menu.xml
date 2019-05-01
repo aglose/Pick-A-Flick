@@ -2,17 +2,17 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/id_card_nav_graph"
-        android:title="@string/title_weather"
-        android:icon="@drawable/ic_weather"
-        android:menuCategory="secondary"
-        app:showAsAction="withText">
+            android:id="@+id/movie_tab"
+            android:title="@string/title_movie"
+            android:icon="@drawable/ic_movie"
+            android:menuCategory="secondary"
+            app:showAsAction="withText">
     </item>
 
     <item
-        android:id="@+id/claim_nav_graph"
-        android:title="@string/title_movie"
-        android:icon="@drawable/ic_movie"
+        android:id="@+id/weather_tab"
+        android:title="@string/title_weather"
+        android:icon="@drawable/ic_weather"
         android:menuCategory="secondary"
         app:showAsAction="withText">
     </item>

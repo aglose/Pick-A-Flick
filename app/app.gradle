@@ -29,17 +29,6 @@ android {
         }
     }
 
-    buildTypes.each {
-        Properties properties = new Properties()
-        properties.load(project.rootProject.file("local.properties").newDataInputStream())
-        def tmdbApiKey = properties.getProperty("tmdb_api_key", "")
-
-        it.buildConfigField 'String', "TMDB_API_KEY", tmdbApiKey
-
-        it.resValue 'string', "api_key", tmdbApiKey
-
-    }
-
     packagingOptions {
         exclude 'META-INF/atomicfu.kotlin_module'
     }

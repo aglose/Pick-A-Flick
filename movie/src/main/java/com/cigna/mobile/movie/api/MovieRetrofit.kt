@@ -1,6 +1,6 @@
-package com.cigna.mobile.pickaflick.di
+package com.cigna.mobile.movie.api
 
-import com.cigna.mobile.pickaflick.BuildConfig
+import com.cigna.mobile.movie.BuildConfig
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -8,15 +8,20 @@ import org.koin.dsl.module
 import retrofit2.Retrofit
 
 val movieRetrofitModule = module {
-    single { OkHttpClient().newBuilder()
-        .addInterceptor(authInterceptor)
-        .build() }
-    single { Retrofit.Builder()
-        .client(get())
+    single { getRetrofit().create(TmdbApi::class.java) }
+}
+
+fun getRetrofit(): Retrofit {
+    return Retrofit.Builder()
+        .client(getMovieHttpClient())
         .baseUrl("https://api.themoviedb.org/3/")
         .addCallAdapterFactory(CoroutineCallAdapterFactory())
-        .build() }
+        .build()
 }
+
+private fun getMovieHttpClient() =  OkHttpClient().newBuilder()
+    .addInterceptor(authInterceptor)
+    .build()
 
 private val authInterceptor = Interceptor {chain->
     val newUrl = chain.request().url()
@@ -30,13 +35,4 @@ private val authInterceptor = Interceptor {chain->
         .build()
 
     chain.proceed(newRequest)
-}
-
-val weatherRetrofitModule = module {
-    single { OkHttpClient().newBuilder().build() }
-    single { Retrofit.Builder()
-        .client(get())
-        .baseUrl("https://api.weather.gov/")
-        .addCallAdapterFactory(CoroutineCallAdapterFactory())
-        .build() }
 }

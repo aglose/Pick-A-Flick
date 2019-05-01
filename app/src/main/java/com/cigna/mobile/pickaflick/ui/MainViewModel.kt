@@ -13,13 +13,5 @@ class MainViewModel(private val movieRepository: MovieRepository,
                     private val weatherRepository: WeatherRepository
 ) : ViewModel() {
 
-    private val weatherLiveData: MutableLiveData<WeatherContext> = MutableLiveData()
 
-    fun getWeatherForLatLng(lat: Int, lng: Int) : LiveData<WeatherContext> {
-        viewModelScope.launch {
-            val weather = weatherRepository.getWeatherForLocationAsync(lat, lng)
-            weatherLiveData.value = weather
-        }
-        return weatherLiveData
-    }
 }

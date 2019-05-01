@@ -74,6 +74,7 @@ dependencies {
     api deps.retrofit.runtime
     api deps.retrofit.gson
     api deps.retrofit.mock
+    api deps.retrofit.coroutine_deferred
     api deps.retrofit.retrofit2_kotlin_coroutines_adapter
     api deps.okhttp_logging_interceptor
 

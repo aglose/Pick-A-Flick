@@ -7,5 +7,5 @@ import retrofit2.http.Path
 
 interface WeatherApi{
     @GET("points/{lat},{lng}")
-    suspend fun getWeatherByLatLngAsync(@Path("lat") lat: Int, @Path("lng") lng: Int): Deferred<WeatherContext>
+    suspend fun getWeatherByLatLngAsync(@Path("lat") lat: Double, @Path("lng") lng: Double): Deferred<WeatherContext>
 }
