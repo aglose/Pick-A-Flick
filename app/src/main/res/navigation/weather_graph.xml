@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/weather_graph" app:startDestination="@id/weatherDashboardFragment">
+
+    <fragment android:id="@+id/weatherDashboardFragment"
+              tools:layout="@layout/fragment_weather_dashboard"
+              android:name="com.cigna.mobile.weather.ui.WeatherDashboardFragment"
+              android:label="@string/title_weather"/>
+</navigation>
