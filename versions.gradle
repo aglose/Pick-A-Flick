@@ -87,6 +87,8 @@ def glide = [:]
 deps.glide = glide
 
 def koin = [:]
+    koin.core = "org.koin:koin-core:$versions.koin"
+    koin.core_ktx = "org.koin:koin-core-ext:$versions.koin"
     koin.android = "org.koin:koin-android:$versions.koin"
     koin.scope = "org.koin:koin-androidx-scope:$versions.koin"
     koin.viewmodel = "org.koin:koin-androidx-viewmodel:$versions.koin"
@@ -141,6 +143,7 @@ deps.okhttp_logging_interceptor = "com.squareup.okhttp3:logging-interceptor:$ver
 
 def room = [:]
     room.runtime = "androidx.room:room-runtime:$versions.room"
+    room.ktx = "androidx.room:room-ktx:$versions.room"
     room.compiler = "androidx.room:room-compiler:$versions.room"
     room.rxjava2 = "androidx.room:room-rxjava2:$versions.room"
     room.testing = "androidx.room:room-testing:$versions.room"

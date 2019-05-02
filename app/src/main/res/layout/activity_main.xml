@@ -17,7 +17,6 @@
             android:id="@+id/bottom_nav"
             app:labelVisibilityMode="labeled"
             app:itemBackground="@color/white"
-            app:elevation="8dp"
             app:itemIconTint="@drawable/bottom_navigation_colors"
             app:itemTextColor="@drawable/bottom_navigation_colors"
             app:menu="@menu/bottom_navigation_menu"

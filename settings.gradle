@@ -1,4 +1,4 @@
-include ':app', ':weather', ':movie', ':shared'
+include ':app', ':weather', ':movie', ':shared', ':db'
 //rootProject.name='PickAFlick'
 
 rootProject.children.each { project ->

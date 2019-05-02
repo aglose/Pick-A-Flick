@@ -1,12 +1,11 @@
 package com.cigna.mobile.pickaflick
 
 import android.app.Application
-import com.cigna.mobile.movie.api.movieRetrofitModule
-import com.cigna.mobile.movie.di.movieRepositoryModule
+import androidx.appcompat.app.AppCompatDelegate
+import com.cigna.mobile.pickaflick.di.repositoryModule
+import com.cigna.mobile.pickaflick.di.retrofitModules
 import com.cigna.mobile.pickaflick.di.roomModule
 import com.cigna.mobile.pickaflick.di.viewModelModules
-import com.cigna.mobile.weather.api.weatherRetrofitModule
-import com.cigna.mobile.weather.di.weatherRepositoryModule
 import leakcanary.LeakCanary
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
@@ -21,16 +20,16 @@ class MyApplication : Application() {
         }
         super.onCreate()
 
-        val repositories = movieRepositoryModule + weatherRepositoryModule
-        val retrofits = weatherRetrofitModule+ movieRetrofitModule
-
         startKoin {
             androidContext(this@MyApplication)
-            modules(repositories
-                    + viewModelModules
-                    + roomModule
-                    + retrofits)
+            modules(viewModelModules +
+                    roomModule +
+                    retrofitModules +
+                    repositoryModule)
         }
+
+        AppCompatDelegate.setDefaultNightMode(
+            AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
     }
 
 }

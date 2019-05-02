@@ -6,5 +6,5 @@
     <fragment android:id="@+id/movieDashboardFragment"
               tools:layout="@layout/fragment_movie_dashboard"
               android:name="com.cigna.mobile.movie.ui.MovieDashboardFragment"
-              android:label="MovieDashboardFragment"/>
+              android:label="@string/title_movie"/>
 </navigation>

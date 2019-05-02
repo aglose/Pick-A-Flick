@@ -18,6 +18,20 @@ android {
 
     }
 
+    buildTypes.each {
+        Properties properties = new Properties()
+        properties.load(project.rootProject.file("local.properties").newDataInputStream())
+        def tmdbApiKey = properties.getProperty("tmdb_api_key", "")
+        it.buildConfigField 'String', "TMDB_API_KEY", tmdbApiKey
+        it.resValue 'string', "tmdb_api_key", tmdbApiKey
+
+        def weatherApiKey = properties.getProperty("weather_api_key", "")
+        it.buildConfigField 'String', "WEATHER_API_KEY", tmdbApiKey
+        it.resValue 'string', "weather_api_key", tmdbApiKey
+
+    }
+
+
     buildTypes {
         release {
             minifyEnabled false
@@ -28,6 +42,10 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    dataBinding {
+        enabled = true
     }
 }
 
@@ -54,9 +72,7 @@ dependencies {
     // work
     api deps.work.runtime_ktx
 
-    // room
-    api deps.room.runtime
-    api deps.room.testing
+
 
     // futures
     api deps.future.runtime
@@ -66,9 +82,12 @@ dependencies {
 //    implementation 'com.crashlytics.sdk.android:crashlytics:2.9.9'
 
     // DI
+    api deps.koin.core
+    api deps.koin.core_ktx
     api deps.koin.android
     api deps.koin.scope
     api deps.koin.viewmodel
+    api deps.koin.test
 
     // networking
     api deps.retrofit.runtime

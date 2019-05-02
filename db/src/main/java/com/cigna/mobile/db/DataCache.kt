@@ -1,6 +1,6 @@
-package com.cigna.mobile.pickaflick.data
+package com.cigna.mobile.db
 
-class DataCache {
+object DataCache {
     private val mDataCache: HashMap<String, Any> = HashMap()
 
     /**
@@ -71,9 +71,12 @@ class DataCache {
      * @param subkey optional secondary key for key
      * @return stored data
      */
-    @JvmOverloads
-    fun getData(key: String, subkey: String = ""): Any? {
-        return mDataCache[mapKeys(key, subkey)]
+    fun <T> getData(key: String?, subkey: String = ""): T? {
+        return mDataCache[mapKeys(key, subkey)] as T?
+    }
+
+    fun getData(key: String?): Any? {
+        return mDataCache[key]
     }
 
     /**
@@ -83,9 +86,9 @@ class DataCache {
      * @return stored data as true or false
      */
     fun getBoolean(key: String): Boolean? {
-        return if (getData(key) == null) {
+        return if (getData(key) as Any? == null) {
             false
-        } else getData(key) as Boolean
+        } else getData(key) as Boolean?
 
     }
 
@@ -110,7 +113,7 @@ class DataCache {
         return mDataCache[mapKeys(key, subKey)] != null
     }
 
-    private fun mapKeys(key: String, subKey: String): String {
+    private fun mapKeys(key: String?, subKey: String): String {
         return key + subKey
     }
 }

@@ -7,5 +7,5 @@
     <fragment android:id="@+id/weatherDashboardFragment"
               tools:layout="@layout/fragment_weather_dashboard"
               android:name="com.cigna.mobile.weather.ui.WeatherDashboardFragment"
-              android:label="WeatherDashboardFragment"/>
+              android:label="@string/title_weather"/>
 </navigation>

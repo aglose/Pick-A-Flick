@@ -1,4 +1,4 @@
-package com.cigna.mobile.movie.data
+package com.cigna.mobile.db
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
