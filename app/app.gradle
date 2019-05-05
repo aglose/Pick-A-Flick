@@ -52,11 +52,9 @@ dependencies {
     implementation project(":movie")
 
     // leak canary
-    debugImplementation deps.leak_canary.core
-    releaseImplementation deps.leak_canary.core
+    debugImplementation Deps.leak_canary.core
+    releaseImplementation Deps.leak_canary.core
 
-    androidTestImplementation deps.atsl.ext_junit
-    androidTestImplementation deps.espresso.core
-
-    androidTestImplementation deps.android_gradle_plugin
+    androidTestImplementation Deps.atsl.ext_junit
+    androidTestImplementation Deps.espresso.core
 }

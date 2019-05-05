@@ -4,7 +4,7 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 
 
-@Database(entities = [TmdbMovie::class, WeatherContext::class], version = 1)
+@Database(entities = [TmdbMovie::class, WeatherPeriods::class], version = 1)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun movieDao(): MovieDao
     abstract fun weatherDao(): WeatherDao

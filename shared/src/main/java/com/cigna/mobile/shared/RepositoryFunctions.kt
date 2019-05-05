@@ -8,33 +8,42 @@ import retrofit2.Response
 
 suspend inline fun <reified T : Any> standardApiCall(
     noinline dbCall: suspend () -> T? = { null },
-    noinline apiCall: () -> Response<T>,
+    noinline apiCall: suspend () -> Response<Any>?,
     noinline networkCallSuccess: suspend (T) -> Unit = { }
 ): IOResponse<T> {
 
     val cacheId = T::class.java.simpleName
-    val cacheResult = com.cigna.mobile.db.DataCache.getData(cacheId)
+    val cacheResult = DataCache.getData(cacheId)
     if (cacheResult != null) {
+        T::class.java.logDebug("FOUND DATA IN CACHE")
         return IOResponse.success(cacheResult as T?)
     }
 
-    return withContext(Dispatchers.IO) {
+    val dbValue =  withContext(Dispatchers.IO) {
         val dbResult = dbCall.invoke()
         if (dbResult != null) {
-            com.cigna.mobile.db.DataCache.addData(cacheId, dbResult)
+            T::class.java.logDebug("FOUND DATA IN DATABASE")
+            DataCache.addData(cacheId, dbResult)
             IOResponse.success(dbResult)
-        }
-
-        val apiResult = apiCall.invoke()
-        if (apiResult.isSuccessful) {
-            val apiBody = apiResult.body()!!
-            com.cigna.mobile.db.DataCache.addData(cacheId, apiBody)
-            networkCallSuccess.invoke(apiBody)
-            IOResponse.success(apiBody)
-        } else {
-            IOResponse.error(apiResult.code(), apiResult.errorBody())
+        }else{
+            IOResponse.error(500, null)
         }
     }
+
+    val apiValue = withContext(Dispatchers.IO){
+        val apiResult = apiCall.invoke()
+        when {
+            apiResult == null -> IOResponse.error(500, null)
+            apiResult.isSuccessful -> {
+                DataCache.addData(cacheId, apiResult)
+                networkCallSuccess.invoke(apiResult.body() as T)
+                IOResponse.success(apiResult.body() as T)
+            }
+            else -> IOResponse.error(apiResult.code(), apiResult.errorBody())
+        }
+    }
+
+    return if(dbValue.isSuccessful()) dbValue else apiValue
 }
 
 suspend fun <T : Any> apiCallNoCache(

@@ -9,16 +9,15 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import com.cigna.mobile.pickaflick.R
 import com.cigna.mobile.shared.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
     private var currentNavController: LiveData<NavController>? = null
-    private val viewModel : MainViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_main)
+
         if (savedInstanceState == null) {
             setupBottomNavigationBar()
         } // Else, need to wait for onRestoreInstanceState

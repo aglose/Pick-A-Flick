@@ -1,53 +1,35 @@
 package com.cigna.mobile.db
 
-import androidx.room.Embedded
+import androidx.room.ColumnInfo
 import androidx.room.Entity
-import androidx.room.Ignore
 import androidx.room.PrimaryKey
 
-@Entity
-data class WeatherContext(
-    @PrimaryKey(autoGenerate = true)
-    val dbId: Int,
-    @Embedded
-    val properties: WeatherProperties?
+data class WeatherContextResponse(
+    val properties: WeatherProperties
 ){
-    @Ignore
-    fun getWeather() = properties?.periods?.get(0)
+    fun getPeriods() = properties.periods
 }
 
-@Entity
 data class WeatherProperties(
-    val forecast: String?,
-    val forecastHourly: String?,
-    @Embedded
-    val relativeLocation: RelativeLocation?,
-    val timeZone: String?,
-    val radarStation: String?,
-    @Embedded
-    val periods: ArrayList<WeatherPeriods>?
-)
-
-@Entity
-data class RelativeLocation (
-    @Embedded
-    val properties: LocationProperties
-)
-
-@Entity
-data class LocationProperties (
-    val city: String,
-    val state: String
+    val periods: List<WeatherPeriods>
 )
 
 @Entity
 data class WeatherPeriods (
-    val name: String,
+    @PrimaryKey(autoGenerate = true)
+    var id: Int,
+    val name: String?,
+    @ColumnInfo(name = "is_daytime")
     val isDaytime: Boolean,
     val temperature: Int,
-    val temperatureUnit: String,
-    val windSpeed: String,
-    val windDirection: String,
-    val shortForecast: String,
-    val detailedForecast: String
+    @ColumnInfo(name = "temperature_unit")
+    val temperatureUnit: String?,
+    @ColumnInfo(name = "wind_speed")
+    val windSpeed: String?,
+    @ColumnInfo(name = "wind_direction")
+    val windDirection: String?,
+    @ColumnInfo(name = "short_forecast")
+    val shortForecast: String?,
+    @ColumnInfo(name = "detailed_forecast")
+    val detailedForecast: String?
 )

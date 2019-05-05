@@ -8,16 +8,16 @@ import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import com.cigna.mobile.weather.data.LatLng
 import com.cigna.mobile.weather.R
+import com.cigna.mobile.weather.data.LatLng
 import com.cigna.mobile.weather.databinding.WeatherImpl
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_weather_dashboard.*
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.androidx.viewmodel.ext.android.getViewModel
 
 
 class WeatherDashboardFragment : Fragment() {
-    private val viewModel : WeatherViewModel by viewModel()
+    private val viewModel : WeatherViewModel by lazy { requireActivity().getViewModel(WeatherViewModel::class) }
 
     private lateinit var binding: WeatherImpl
 
@@ -31,16 +31,17 @@ class WeatherDashboardFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel.subscribeToErrors().observe(this, Observer {
-            Snackbar.make(view, "Error occurred: $it", Snackbar.LENGTH_LONG).show()
+            Snackbar.make(requireView(), "Error occurred: $it", Snackbar.LENGTH_LONG).show()
         })
 
         viewModel.subscribeToLoading().observe(this, Observer {
             progress_bar.visibility = if(it) VISIBLE else GONE
         })
 
-        viewModel.getWeatherForLatLng(LatLng(39.946632, -75.172134)).observe(this, Observer {
-//            texting_123.text = it.properties.forecast
-            binding.setWeather(it.getWeather())
+        viewModel.getWeatherForLatLng(LatLng(41.946632, -75.172134)).observe(this, Observer {
+            if(!it.isNullOrEmpty()){
+                binding.weather = it[0]
+            }
         })
     }
 }

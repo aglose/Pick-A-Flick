@@ -5,22 +5,16 @@ import androidx.room.*
 
 @Dao
 interface WeatherDao {
-    @Query("SELECT * FROM weathercontext")
-    suspend fun getAll() : List<WeatherContext>
+    @Query("SELECT * FROM weatherperiods")
+    fun getAll() : List<WeatherPeriods>
 
-    @Insert
-    suspend fun insertAll(vararg weather: WeatherContext)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertAll(weather: List<WeatherPeriods>)
 
-    @Transaction
-    suspend fun replace(weather: WeatherContext){
-        deleteAll()
-        insertAll(weather)
-    }
-
-    @Query("DELETE FROM weathercontext")
-    suspend fun deleteAll()
+    @Query("DELETE FROM weatherperiods")
+    fun deleteAll()
 
     @Delete
-    suspend fun delete(user: WeatherContext)
+    fun delete(user: WeatherPeriods)
 
 }

@@ -33,10 +33,11 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation project(':shared')
 
     // room
-    api deps.room.runtime
-    api deps.room.ktx
-    kapt deps.room.compiler
-    api deps.room.testing
+    implementation Deps.room.runtime
+//    api Deps.room.ktx
+    kapt Deps.room.compiler
+//    api Deps.room.testing
 }

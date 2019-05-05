@@ -9,11 +9,11 @@ import androidx.room.Query
 @Dao
 interface MovieDao {
     @Query("SELECT * FROM tmdbmovie")
-    suspend fun getAll() : List<TmdbMovie>
+    fun getAll() : List<TmdbMovie>
 
     @Insert
-    suspend fun insertAll(vararg users: TmdbMovie)
+    fun insertAll(vararg users: TmdbMovie)
 
     @Delete
-    suspend fun delete(user: TmdbMovie)
+    fun delete(user: TmdbMovie)
 }
