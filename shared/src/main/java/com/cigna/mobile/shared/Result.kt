@@ -9,9 +9,11 @@ import okhttp3.ResponseBody
 sealed class Result<out T : Any> {
 
     data class Success<out T : Any>(val data: T) : Result<T>()
-    data class Error(val exception: Exception? = null,
-                     val code: Int = 500,
-                     val errorBody: ResponseBody? = null) : Result<Nothing>()
+    data class Error(
+        val exception: Exception? = null,
+        val code: Int = 500,
+        val errorBody: ResponseBody? = null
+    ) : Result<Nothing>()
 
     override fun toString(): String {
         return when (this) {

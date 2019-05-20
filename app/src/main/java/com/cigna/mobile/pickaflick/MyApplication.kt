@@ -31,5 +31,4 @@ class MyApplication : Application() {
         AppCompatDelegate.setDefaultNightMode(
             AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
     }
-
 }

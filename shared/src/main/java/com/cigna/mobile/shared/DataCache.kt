@@ -6,9 +6,9 @@ object DataCache {
     /**
      * Store in the in-memory cache only
      *
-     * @param key    primary key for key
+     * @param key primary key for key
      * @param subkey optional secondary key for key
-     * @param obj    data to store
+     * @param obj data to store
      */
     fun addData(key: String, subkey: String = "", obj: Any) {
         mDataCache[mapKeys(key, subkey)] = obj
@@ -27,7 +27,7 @@ object DataCache {
     /**
      * Remove data from in-memory cache
      *
-     * @param key    primary key for key
+     * @param key primary key for key
      * @param subkey optional secondary key for key
      */
     @JvmOverloads
@@ -46,9 +46,9 @@ object DataCache {
     /**
      * Update data in the in-memory cache
      *
-     * @param key    primary key for key
+     * @param key primary key for key
      * @param subkey optional secondary key for key
-     * @param obj    data to replace
+     * @param obj data to replace
      */
     fun replaceData(key: String, subkey: String = "", obj: Any) {
         mDataCache[mapKeys(key, subkey)] = obj
@@ -67,7 +67,7 @@ object DataCache {
     /**
      * Get data from the in-memory cache
      *
-     * @param key    primary key for key
+     * @param key primary key for key
      * @param subkey optional secondary key for key
      * @return stored data
      */
@@ -89,7 +89,6 @@ object DataCache {
         return if (getData(key) as Any? == null) {
             false
         } else getData(key) as Boolean?
-
     }
 
     /**
@@ -105,7 +104,7 @@ object DataCache {
     /**
      * Checks whether given data exists in-memory cache.
      *
-     * @param key    primary key for key
+     * @param key primary key for key
      * @param subKey optional secondary for key
      * @return true or false
      */

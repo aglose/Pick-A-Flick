@@ -26,12 +26,12 @@ suspend inline fun <reified DBType : Any, reified ApiResponse : Any> fullService
             DBType::class.java.logDebug("FOUND DATA IN DATABASE")
             DataCache.addData(cacheId, dbResult)
             Result.Success(dbResult)
-        }else{
+        } else {
             Result.Error(null, 500)
         }
     }
 
-    val apiValue = withContext(Dispatchers.IO){
+    val apiValue = withContext(Dispatchers.IO) {
         try {
             val apiResult = apiCall.invoke()
             when {
@@ -42,12 +42,12 @@ suspend inline fun <reified DBType : Any, reified ApiResponse : Any> fullService
                 }
                 else -> Result.Error(code = apiResult.code(), errorBody = apiResult.errorBody())
             }
-        }catch (e: Exception){
+        } catch (e: Exception) {
             Result.Error(code = 500)
         }
     }
 
-    return when(dbValue){
+    return when (dbValue) {
         is Result.Success -> dbValue
         is Result.Error -> apiValue
     }

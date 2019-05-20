@@ -2,11 +2,10 @@ package com.cigna.mobile.db
 
 import androidx.room.*
 
-
 @Dao
 interface WeatherDao {
     @Query("SELECT * FROM weatherperiods")
-    fun getAll() : List<WeatherPeriods>
+    fun getAll(): List<WeatherPeriods>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(weather: List<WeatherPeriods>)
@@ -16,5 +15,4 @@ interface WeatherDao {
 
     @Delete
     fun delete(user: WeatherPeriods)
-
 }

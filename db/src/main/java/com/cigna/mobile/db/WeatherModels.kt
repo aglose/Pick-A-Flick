@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 
 data class WeatherContextResponse(
     val properties: WeatherProperties
-){
+) {
     fun getPeriods() = properties.periods
 }
 
@@ -15,7 +15,7 @@ data class WeatherProperties(
 )
 
 @Entity
-data class WeatherPeriods (
+data class WeatherPeriods(
     @PrimaryKey(autoGenerate = true)
     var id: Int,
     val name: String?,

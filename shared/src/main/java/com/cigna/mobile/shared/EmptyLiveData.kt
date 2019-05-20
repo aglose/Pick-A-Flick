@@ -2,7 +2,6 @@ package com.cigna.mobile.shared
 
 import androidx.lifecycle.LiveData
 
-
 /**
  * A LiveData class that is just returns an empty version
  *

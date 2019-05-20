@@ -23,12 +23,12 @@ private fun getMovieRetrofit(): Retrofit {
         .build()
 }
 
-private fun getMovieHttpClient() =  OkHttpClient.Builder()
+private fun getMovieHttpClient() = OkHttpClient.Builder()
     .addInterceptor(authInterceptor)
     .addInterceptor(getLoggingInterceptor())
     .build()
 
-private val authInterceptor = Interceptor {chain->
+private val authInterceptor = Interceptor { chain ->
     val newUrl = chain.request().url()
         .newBuilder()
         .addQueryParameter("api_key", BuildConfig.TMDB_API_KEY)

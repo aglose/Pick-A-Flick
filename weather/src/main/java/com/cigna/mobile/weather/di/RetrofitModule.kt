@@ -8,7 +8,7 @@ import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-private fun getWeatherRetrofit() : Retrofit {
+private fun getWeatherRetrofit(): Retrofit {
     return Retrofit.Builder()
         .client(OkHttpClient.Builder().addInterceptor(getLoggingInterceptor()).build())
         .baseUrl("https://api.weather.gov/")
