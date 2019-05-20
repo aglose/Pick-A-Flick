@@ -9,12 +9,27 @@ buildscript {
         classpath Deps.google_service
         classpath Deps.navigation.safe_args_plugin
         classpath Deps.kotlin.plugin
+        classpath Deps.ktlint_plugin
     }
     repositories {
         google()
     }
 }
 
+subprojects {
+    apply plugin: "org.jlleitschuh.gradle.ktlint" // Version should be inherited from parent
+
+    ktlint {
+        android = true
+        outputToConsole = true
+        ignoreFailures = true
+        filter {
+            exclude("**/generated/**")
+        }
+    }
+}
+
 allprojects {
     addRepos(repositories)
 }
+

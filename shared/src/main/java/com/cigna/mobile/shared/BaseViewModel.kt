@@ -7,18 +7,19 @@ abstract class BaseViewModel : ViewModel() {
     private val loadingLiveData = MutableLiveData<Boolean>()
     private val errorLiveData= MutableLiveData<Int>()
 
-    fun <T: Any> LiveData<IOResponse<T>>.callRepo(repoCall: suspend () -> Unit): LiveData<T> {
+    fun <T: Any> LiveData<Result<T>>.callRepo(repoCall: suspend () -> Unit): LiveData<T> {
         loadingLiveData.value = true
         viewModelScope.launch {
             repoCall.invoke()
             loadingLiveData.value = false
         }
         return Transformations.map(this) {
-            if(!it.isSuccessful()){
-                errorLiveData.value = it.errorCode
-                null
-            }else{
-                it.result
+            when(it){
+                is Result.Success -> it.data
+                is Result.Error -> {
+                    errorLiveData.value = it.code
+                    null
+                }
             }
         }
     }

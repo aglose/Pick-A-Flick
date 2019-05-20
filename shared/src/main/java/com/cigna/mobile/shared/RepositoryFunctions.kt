@@ -5,78 +5,64 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Response
+import java.io.IOException
 
-suspend inline fun <reified T : Any> standardApiCall(
-    noinline dbCall: suspend () -> T? = { null },
-    noinline apiCall: suspend () -> Response<Any>?,
-    noinline networkCallSuccess: suspend (T) -> Unit = { }
-): IOResponse<T> {
+suspend inline fun <reified DBType : Any, reified ApiResponse : Any> fullServiceCall(
+    noinline dbCall: suspend () -> DBType? = { null },
+    noinline apiCall: suspend () -> Response<ApiResponse>,
+    noinline networkCallSuccess: suspend (ApiResponse?) -> Unit = { }
+): Result<DBType> {
 
-    val cacheId = T::class.java.simpleName
+    val cacheId = DBType::class.java.simpleName
     val cacheResult = DataCache.getData(cacheId)
     if (cacheResult != null) {
-        T::class.java.logDebug("FOUND DATA IN CACHE")
-        return IOResponse.success(cacheResult as T?)
+        DBType::class.java.logDebug("FOUND DATA IN CACHE")
+        return Result.Success(cacheResult as DBType)
     }
 
-    val dbValue =  withContext(Dispatchers.IO) {
+    val dbValue = withContext(Dispatchers.IO) {
         val dbResult = dbCall.invoke()
         if (dbResult != null) {
-            T::class.java.logDebug("FOUND DATA IN DATABASE")
+            DBType::class.java.logDebug("FOUND DATA IN DATABASE")
             DataCache.addData(cacheId, dbResult)
-            IOResponse.success(dbResult)
+            Result.Success(dbResult)
         }else{
-            IOResponse.error(500, null)
+            Result.Error(null, 500)
         }
     }
 
     val apiValue = withContext(Dispatchers.IO){
-        val apiResult = apiCall.invoke()
-        when {
-            apiResult == null -> IOResponse.error(500, null)
-            apiResult.isSuccessful -> {
-                DataCache.addData(cacheId, apiResult)
-                networkCallSuccess.invoke(apiResult.body() as T)
-                IOResponse.success(apiResult.body() as T)
+        try {
+            val apiResult = apiCall.invoke()
+            when {
+                apiResult.isSuccessful -> {
+                    DataCache.addData(cacheId, apiResult)
+                    networkCallSuccess.invoke(apiResult.body())
+                    Result.Success(apiResult.body() as DBType)
+                }
+                else -> Result.Error(code = apiResult.code(), errorBody = apiResult.errorBody())
             }
-            else -> IOResponse.error(apiResult.code(), apiResult.errorBody())
+        }catch (e: Exception){
+            Result.Error(code = 500)
         }
     }
 
-    return if(dbValue.isSuccessful()) dbValue else apiValue
-}
-
-suspend fun <T : Any> apiCallNoCache(
-    dbCall: suspend () -> T? = { null },
-    apiCall: suspend () -> Response<T>,
-    networkCallSuccess: suspend (T) -> Unit = { }
-): IOResponse<T> = withContext(Dispatchers.IO) {
-    val dbResult = dbCall.invoke()
-    if (dbResult != null) {
-        IOResponse.success(dbResult)
-    }
-
-    val apiResult = apiCall.invoke()
-    if (apiResult.isSuccessful) {
-        val apiBody = apiResult.body()!!
-        networkCallSuccess.invoke(apiBody)
-        IOResponse.success(apiBody)
-    } else {
-        IOResponse.error(apiResult.code(), apiResult.errorBody())
+    return when(dbValue){
+        is Result.Success -> dbValue
+        is Result.Error -> apiValue
     }
 }
 
-suspend fun <T : Any> apiCallOnly(
-    apiCall: suspend () -> Response<T>,
-    networkCallSuccess: suspend (T) -> Unit = { }
-): IOResponse<T> = withContext(Dispatchers.IO) {
-    val apiResult = apiCall.invoke()
-    if (apiResult.isSuccessful) {
-        val apiBody = apiResult.body()!!
-        networkCallSuccess.invoke(apiBody)
-        IOResponse.success(apiBody)
-    } else {
-        IOResponse.error(apiResult.code(), apiResult.errorBody())
+/**
+ * Wrap a suspending API [call] in try/catch. In case an exception is thrown, a [Result.Error] is
+ * created based on the [errorMessage].
+ */
+suspend fun <T : Any> safeApiCall(call: suspend () -> Result<T>, errorMessage: String): Result<T> {
+    return try {
+        call()
+    } catch (e: Exception) {
+        // An exception was thrown when calling the API so we're converting this to an IOException
+        Result.Error(IOException(errorMessage, e))
     }
 }
 
